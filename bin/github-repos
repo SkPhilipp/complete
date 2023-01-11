@@ -1,0 +1,37 @@
+#!/usr/bin/env bash
+#
+# Locates GitHub organizations or repositories within a given organization.
+# Organizations are limited to those of which the current GitHub CLI user is a member.
+#
+# Usage:
+#   github-repos [organization-query] [repository-query]
+#
+#   organization-query: A query to filter organizations by name.
+#   repository-query: A query to filter repositories within an organization by name,
+#                     this query may contain multiple sub-queries separated by a plus sign.
+#
+# Example:
+#   $ github-repos So
+#   SomeDummyOrganization
+#
+#   $ github-repos SomeDummyOrganization example
+#   SomeDummyOrganization/action-example
+#   SomeDummyOrganization/other-examples
+#
+#   $ github-repos SomeDummyOrganization example+action
+#   SomeDummyOrganization/action-example
+#
+
+set -e -u -o pipefail
+
+# organizations according to the GitHub CLI
+organization_query=$1
+if [ $# -eq 1 ]; then
+  gh api /user/orgs --jq '.[].login' | grep "^$organization_query"
+  exit 0
+fi
+
+# repository name queries, url-encoded and separated by a plus sign
+repository_query_encoded=$(echo "$2" | jq --raw-input --raw-output @uri | sed 's/%2B/+/g')
+organization_query_encoded=$(echo "$organization_query" | jq --raw-input --raw-output @uri)
+gh api --jq '.items[].name' "/search/repositories?type=repositories&q=org:$organization_query_encoded+$repository_query_encoded"
