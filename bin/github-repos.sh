@@ -29,7 +29,6 @@ for part in $@; do
   part_encoded=$(echo "$part" | jq --raw-input --raw-output @uri | sed 's/%2B/+/g')
   query="+$part_encoded$query"
 done
-unset IFS
 
 organizations=$(github-orgs.sh "$organization_prefix_pattern")
 for organization in $organizations; do
