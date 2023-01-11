@@ -1,10 +1,29 @@
 # Install
 
-- Git clone this repo
-- Add to your bash profile;
+- Download this repository
+- Add `$REPOSITORY_PATH/bin` to your path
+- Add `source "$REPOSITORY_PATH/completion.sh"` to your shell startup file
 
-```bash
-COMPLETE_DIR=/path/to/this/repo
-export PATH="$COMPLETE_DIR/bin:$PATH"
-source "$COMPLETE_DIR/completion.sh"
+## Usage
+
+CLI commands;
+
+- `git-defaults` - Check out & pull the default branch of the local repository
+- `source github-cd` - Change directory to a GitHub repository, clone if necessary
+
+Aliases;
+
+- `gcd` - Alias for `source github-cd` to allow changing directory
+- Optionally add to your `~/.gitconfig`;
+
 ```
+[alias]
+  defaults = "git-defaults"
+```
+
+## Autocompletion
+
+This project contains the autocompletion for the `gcd` command;
+
+- `gcd <prefix><TAB>` - List all GitHub organizations the local GitHub CLI user is member of.
+- `gcd <org> <query><TAB>` - List all matching repositories in a GitHub organization. Use`+` to combine multiple queries.

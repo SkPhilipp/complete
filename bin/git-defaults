@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+#
+# Runs git fetch, checks out the default branch and pulls the latest changes.
+#
+# Usage:
+#   git-defaults
+#
+function _git_defaults() {
+  git fetch
+  default_branch=$(git symbolic-ref refs/remotes/origin/HEAD | sed 's#^refs/remotes/origin/##')
+  git checkout "$default_branch"
+  git pull
+}
+
+_git_defaults $@
+
+unset _git_defaults

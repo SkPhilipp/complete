@@ -1,24 +1,26 @@
 #!/usr/bin/env bash
 
-_github_repos() {
+_gcd_completion() {
   COMPREPLY=()
 
-  # when completing the first argument, complete organizations
+  # complete organizations
   if [ $COMP_CWORD -eq 1 ]; then
-    current="${COMP_WORDS[COMP_CWORD]}"
-    COMPREPLY=($(github-repos "${current}"))
+    p1="${COMP_WORDS[COMP_CWORD]}"
+    COMPREPLY=($(complete-gh-orgs "${p1}"))
     return 0
   fi
 
-  # when completing the second argument, complete repositories
+  # complete repositories
   if [ $COMP_CWORD -eq 2 ]; then
-    organization="${COMP_WORDS[COMP_CWORD - 1]}"
-    current="${COMP_WORDS[COMP_CWORD]}"
-    COMPREPLY=($(github-repos "${organization}" "${current}"))
+    p1="${COMP_WORDS[COMP_CWORD - 1]}"
+    p2="${COMP_WORDS[COMP_CWORD]}"
+    COMPREPLY=($(complete-gh-repos "${p1}" "${p2}"))
     return 0
   fi
 
   return 0
 }
 
-complete -F _github_repos "github-repos"
+alias "gcd=source github-cd"
+
+complete -F _gcd_completion "gcd"

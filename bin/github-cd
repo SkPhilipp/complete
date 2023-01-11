@@ -1,0 +1,53 @@
+#!/usr/bin/env bash
+#
+# Prints the local path to a GitHub repository.
+# If the repository is not found locally, it is cloned.
+#
+# Usage:
+#   github-cd [organization] [repository]
+#
+# Example:
+#   $ github-cd SomeDummyOrganization action-example
+#
+function _github_cd() {
+  organization=$1
+  repository=$2
+  repository_path=$(pwd)
+
+  # ensure ~/.complete.yml exists
+  if [ ! -f ~/.complete.yml ]; then
+    touch ~/.complete.yml
+  fi
+
+  config_org_key=".organization.${organization}.path"
+  config_org=$(yq "${config_org_key}" ~/.complete.yml)
+  config_default_key=".default.path"
+  config_default=$(yq "${config_default_key}" ~/.complete.yml)
+
+  # if the organization is configured, use that path
+  if [ "${config_org}" != "null" ]; then
+    repository_path="${config_org}"
+  # otherwise, use the default path
+  elif [ "${config_default}" != "null" ]; then
+    repository_path="${config_default}"
+  # otherwise, warn the user
+  else
+    echo "No default path configured. Using current directory."
+    echo "Configure a default path in ~/.complete.yml under keys:"
+    echo "  .default.path"
+    echo "  .organization.${organization}.path"
+  fi
+
+  # if the repository doesn't exist, clone it
+  if [ ! -d "$repository_path/$repository" ]; then
+    echo "Cloning '$organization/$repository'..."
+    gh repo clone "$organization/$repository" "$repository_path/$repository"
+  fi
+
+  # cd to the repository
+  cd "$repository_path/$repository"
+}
+
+_github_cd $@
+
+unset _github_cd
