@@ -8,18 +8,12 @@
 
 CLI commands;
 
-- `git-defaults` - Check out & pull the default branch of the local repository
-- `source github-cd` - Change directory to a GitHub repository, clone if necessary
+- `git defaults` - Check out & pull the default branch of the local repository
+- `source github-cd <org> <repo>` - Change directory to a GitHub repository, clone if necessary
 
 Aliases;
 
 - `gcd` - Alias for `source github-cd` to allow changing directory
-- Optionally add to your `~/.gitconfig`;
-
-```
-[alias]
-  defaults = "git-defaults"
-```
 
 ## Autocompletion
 
