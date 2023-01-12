@@ -9,11 +9,9 @@
 CLI commands;
 
 - `git defaults` - Check out & pull the default branch of the local repository
-- `source github-cd <org> <repo>` - Change directory to a GitHub repository, clone if necessary
+- `gcd <org> <repo>` - Change directory to that of a GitHub repository, clone if necessary
 
-Aliases;
-
-- `gcd` - Alias for `source github-cd` to allow changing directory
+Note that `gcd` is an alias for `source github-cd` to allow changing directory
 
 ## Autocompletion
 
