@@ -3,10 +3,10 @@
 _gcd_completion() {
   COMPREPLY=()
 
-  # complete organizations
+  # complete owners
   if [ $COMP_CWORD -eq 1 ]; then
     p1="${COMP_WORDS[COMP_CWORD]}"
-    COMPREPLY=($(complete-gh-orgs "${p1}"))
+    COMPREPLY=($(complete-gh-owners "${p1}"))
     return 0
   fi
 

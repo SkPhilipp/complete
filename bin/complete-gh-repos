@@ -1,13 +1,10 @@
 #!/usr/bin/env bash
 #
-# Locates GitHub organizations or repositories within a given organization.
-# Organizations are limited to those of which the current GitHub CLI user is a member.
-#
 # Usage:
-#   complete-gh-repos [organization] [repository-query]
+#   complete-gh-repos [owner] [repository-query]
 #
-#   organization: A GitHub Organization.
-#   repository-query: A query to filter repositories within an organization by name,
+#   owner: The owner of the repositories to search.
+#   repository-query: A query to filter repositories within an owner by name,
 #                     this query may contain multiple sub-queries separated by a plus sign.
 #
 # Example:
@@ -21,9 +18,10 @@
 
 set -e -u -o pipefail
 
-organization=$1
+owner=$1
+owner_encoded=$(echo "$owner" | jq --raw-input --raw-output @uri)
 
 # repository name queries, url-encoded and separated by a plus sign
 repository_query_encoded=$(echo "$2" | jq --raw-input --raw-output @uri | sed 's/%2B/+/g')
-organization_query_encoded=$(echo "$organization" | jq --raw-input --raw-output @uri)
-gh api --jq '.items[].name' "/search/repositories?type=repositories&q=org:$organization_query_encoded+$repository_query_encoded"
+
+gh api --jq '.items[].name' "/search/repositories?type=repositories&q=org:$owner_encoded+$repository_query_encoded"

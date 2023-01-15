@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+#
+# Usage:
+#   complete-gh-owners [query]
+#
+#   owner-query: A query to filter a list of both the local user and all organizations it is a member of by name.
+#
+# Example:
+#   $ complete-gh-owners So
+#   SomeDummyOrganization
+#   SomeUser
+#
+
+set -e -u -o pipefail
+
+query=$1
+gh api /user/orgs --jq '.[].login' | (grep "^$query" || true)
+gh api /user --jq '.login' | (grep "^$query" || true)
