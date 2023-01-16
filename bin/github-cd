@@ -19,14 +19,14 @@ function _github_cd() {
     touch ~/.complete.yml
   fi
 
-  config_org_key=".owner.${organization}.path"
-  config_org=$(yq "${config_org_key}" ~/.complete.yml)
+  config_owner_key=".owner.${owner}.path"
+  config_owner=$(yq "${config_owner_key}" ~/.complete.yml)
   config_default_key=".default.path"
   config_default=$(yq "${config_default_key}" ~/.complete.yml)
 
   # if the owner is configured, use that path
-  if [ "${config_org}" != "null" ]; then
-    repository_path="${config_org}"
+  if [ "${config_owner}" != "null" ]; then
+    repository_path="${config_owner}"
   # otherwise, use the default path
   elif [ "${config_default}" != "null" ]; then
     repository_path="${config_default}"
